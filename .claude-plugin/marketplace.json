@@ -1,0 +1,17 @@
+{
+  "name": "interragate",
+  "description": "interragate for coding agents: review Terraform and OpenTofu plans before you apply them.",
+  "owner": {
+    "name": "Jeecabs",
+    "url": "https://github.com/Jeecabs"
+  },
+  "plugins": [
+    {
+      "name": "interragate",
+      "description": "Review Terraform and OpenTofu plans before you apply them: what each change means, what destroys data, what only changes because something else does, where the apply will fail, and which changes no edit explains.",
+      "version": "0.1.0",
+      "category": "Coding",
+      "source": "./plugins/interragate"
+    }
+  ]
+}

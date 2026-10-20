@@ -1,0 +1,20 @@
+# The catalog that lists the agent plugin in plugins/interragate, for APM
+# (https://github.com/microsoft/apm). make plugin writes the catalogs from
+# this file.
+name: interragate
+version: 0.1.0
+license: AGPL-3.0-only
+author: Jeecabs
+marketplace:
+  description: "interragate for coding agents: review Terraform and OpenTofu plans before you apply them."
+  owner:
+    name: Jeecabs
+    url: https://github.com/Jeecabs
+  outputs:
+    claude: {}
+    codex: {}
+    copilot: {}
+  packages:
+    - name: interragate
+      source: ./plugins/interragate
+      category: Coding

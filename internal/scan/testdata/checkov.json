@@ -1,0 +1,67 @@
+{
+ "check_type": "terraform",
+ "results": {
+  "failed_checks": [
+   {
+    "check_id": "CKV_AWS_23",
+    "check_name": "Ensure every security group and rule has a description",
+    "file_path": "/main.tf",
+    "file_line_range": [
+     58,
+     85
+    ],
+    "resource": "aws_security_group.alb",
+    "severity": null,
+    "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/networking-31"
+   },
+   {
+    "check_id": "CKV_AWS_382",
+    "check_name": "Ensure no security groups allow egress from 0.0.0.0:0 to port -1",
+    "file_path": "/main.tf",
+    "file_line_range": [
+     58,
+     85
+    ],
+    "resource": "aws_security_group.alb",
+    "severity": null,
+    "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/bc-aws-382"
+   },
+   {
+    "check_id": "CKV_AWS_260",
+    "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 80",
+    "file_path": "/main.tf",
+    "file_line_range": [
+     58,
+     85
+    ],
+    "resource": "aws_security_group.alb",
+    "severity": null,
+    "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/ensure-aws-security-groups-do-not-allow-ingress-from-00000-to-port-80"
+   },
+   {
+    "check_id": "CKV_AWS_130",
+    "check_name": "Ensure VPC subnets do not assign public IP by default",
+    "file_path": "/modules/network/main.tf",
+    "file_line_range": [
+     27,
+     34
+    ],
+    "resource": "module.network.aws_subnet.public[0]",
+    "severity": null,
+    "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/ensure-vpc-subnets-do-not-assign-public-ip-by-default"
+   },
+   {
+    "check_id": "CKV_AWS_130",
+    "check_name": "Ensure VPC subnets do not assign public IP by default",
+    "file_path": "/modules/network/main.tf",
+    "file_line_range": [
+     27,
+     34
+    ],
+    "resource": "module.network.aws_subnet.public[1]",
+    "severity": null,
+    "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/ensure-vpc-subnets-do-not-assign-public-ip-by-default"
+   }
+  ]
+ }
+}

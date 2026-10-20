@@ -1,0 +1,352 @@
+random_string.imported: Preparing import... [id=Imported0Value1]
+random_uuid.legacy_id: Refreshing state... [id=427b8c5a-28c2-6eba-c97b-241d4bdf4d6e]
+random_string.api_key: Refreshing state... [id=dySmuKFm6Gx8sAwfBvCVh0r1dk3SU9DH]
+module.legacy.random_string.token: Refreshing state... [id=dChR4ZBx]
+random_shuffle.az: Refreshing state... [id=-]
+random_integer.port: Refreshing state... [id=8914]
+random_string.imported: Refreshing state... [id=Imported0Value1]
+random_string.session_key: Refreshing state... [id=X2zdx41iXaXvgEYP]
+random_password.db: Refreshing state... [id=none]
+random_id.suffix: Refreshing state... [id=SaxlCA]
+random_pet.cluster: Refreshing state... [id=hopeful-ray]
+module.cache.random_id.node[1]: Refreshing state... [id=n9w]
+module.cache.random_id.node[0]: Refreshing state... [id=Ep4]
+local_file.policy: Refreshing state... [id=5c25b7d6e023e186f7c710dcbad34396f94e9325]
+local_file.config: Refreshing state... [id=fc42ac18ec2106024169f2cfd7ed77d3fe29e9fc]
+local_file.readme: Refreshing state... [id=9385bdaa683a9cb61cd57f5d5ef7acf68421c798]
+terraform_data.deploy: Refreshing state... [id=327eca9a-45b1-cf97-3007-0f5e20987de9]
+module.legacy.null_resource.beacon: Refreshing state... [id=7232937734345449462]
+null_resource.worker[2]: Refreshing state... [id=2855439545864546091]
+null_resource.queue["reports"]: Refreshing state... [id=8725832522511956732]
+null_resource.queue["emails"]: Refreshing state... [id=4712942696727624139]
+module.cache.null_resource.warmup: Refreshing state... [id=3756318978733574506]
+null_resource.worker[1]: Refreshing state... [id=4301877753939348734]
+null_resource.queue["orders"]: Refreshing state... [id=2727762083229399811]
+null_resource.worker[0]: Refreshing state... [id=7854908308578414649]
+terraform_data.migrations: Refreshing state... [id=2c94ef45-90ac-ea66-27d6-67a3f5ecb8b0]
+
+OpenTofu used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+  ~ update in-place (current -> planned)
+  - destroy
+-/+ destroy and then create replacement
++/- create replacement and then destroy
+ <= read (data resources)
+  . forget
+
+OpenTofu will perform the following actions:
+
+  # data.local_file.policy_read will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "local_file" "policy_read" {
+      + content              = (known after apply)
+      + content_base64       = (known after apply)
+      + content_base64sha256 = (known after apply)
+      + content_base64sha512 = (known after apply)
+      + content_md5          = (known after apply)
+      + content_sha1         = (known after apply)
+      + content_sha256       = (known after apply)
+      + content_sha512       = (known after apply)
+      + filename             = "./out/policy.json"
+      + id                   = (known after apply)
+    }
+
+  # local_file.config must be replaced
+-/+ resource "local_file" "config" {
+      ~ content              = <<-EOT # forces replacement
+            CLUSTER=hopeful-ray
+          - ENV=staging
+          - LOG_LEVEL=info
+          - WORKERS=3
+          + ENV=production
+          + LOG_LEVEL=debug
+          + WORKERS=2
+        EOT
+      ~ content_base64sha256 = "oRfqpxQHytTeLS2AcRFxOoW7gbpey/fwOXSgP9YKnZk=" -> (known after apply)
+      ~ content_base64sha512 = "x9ueRpqjqjNKfL+ciPf/49ba9jtrsq7QciAANhPFxVBDYju1mDu+HiIyRSYj85RagwziHM6RdcL1pbwp0fEYKQ==" -> (known after apply)
+      ~ content_md5          = "bbe9be15d1a63e17740c5bd3ae0009c2" -> (known after apply)
+      ~ content_sha1         = "fc42ac18ec2106024169f2cfd7ed77d3fe29e9fc" -> (known after apply)
+      ~ content_sha256       = "a117eaa71407cad4de2d2d807111713a85bb81ba5ecbf7f03974a03fd60a9d99" -> (known after apply)
+      ~ content_sha512       = "c7db9e469aa3aa334a7cbf9c88f7ffe3d6daf63b6bb2aed07220003613c5c55043623bb5983bbe1e2232452623f3945a830ce21cce9175c2f5a5bc29d1f11829" -> (known after apply)
+      ~ id                   = "fc42ac18ec2106024169f2cfd7ed77d3fe29e9fc" -> (known after apply)
+        # (3 unchanged attributes hidden)
+    }
+
+  # local_file.policy must be replaced
+-/+ resource "local_file" "policy" {
+      ~ content              = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action   = [
+                          - "s3:GetObject",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = [
+                          - "arn:aws:s3:::assets-49ac6508/*",
+                        ]
+                      - Sid      = "ReadAssets"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            } # forces replacement
+        ) -> (known after apply) # forces replacement
+      ~ content_base64sha256 = "JKyyRxYbxZK+0g6Z1QVa6mBtbUD+UWjiyHK2WKOzPl4=" -> (known after apply)
+      ~ content_base64sha512 = "BuXtj/Db5VFd2tX96EDfxo8ZRfto2l1b9qgwPzc3yQpTqqaj6B29yBwaPDEQc/L3YPgpNK8wZWEJ3uCdG2322g==" -> (known after apply)
+      ~ content_md5          = "892eb0b20f9eeecc2457c8b6edbf4013" -> (known after apply)
+      ~ content_sha1         = "5c25b7d6e023e186f7c710dcbad34396f94e9325" -> (known after apply)
+      ~ content_sha256       = "24acb247161bc592bed20e99d5055aea606d6d40fe5168e2c872b658a3b33e5e" -> (known after apply)
+      ~ content_sha512       = "06e5ed8ff0dbe5515ddad5fde840dfc68f1945fb68da5d5bf6a8303f3737c90a53aaa6a3e81dbdc81c1a3c311073f2f760f82934af30656109dee09d1b6df6da" -> (known after apply)
+      ~ id                   = "5c25b7d6e023e186f7c710dcbad34396f94e9325" -> (known after apply)
+        # (3 unchanged attributes hidden)
+    }
+
+  # local_file.readme will be created
+  + resource "local_file" "readme" {
+      + content              = <<-EOT
+            Generated by Terraform. Do not edit.
+        EOT
+      + content_base64sha256 = (known after apply)
+      + content_base64sha512 = (known after apply)
+      + content_md5          = (known after apply)
+      + content_sha1         = (known after apply)
+      + content_sha256       = (known after apply)
+      + content_sha512       = (known after apply)
+      + directory_permission = "0777"
+      + file_permission      = "0777"
+      + filename             = "./out/README.md"
+      + id                   = (known after apply)
+    }
+
+  # null_resource.queue["invoices"] will be created
+  + resource "null_resource" "queue" {
+      + id       = (known after apply)
+      + triggers = {
+          + "name" = "invoices"
+        }
+    }
+
+  # null_resource.queue["orders"] will be replaced, as requested
+-/+ resource "null_resource" "queue" {
+      ~ id       = "2727762083229399811" -> (known after apply)
+        # (1 unchanged attribute hidden)
+    }
+
+  # null_resource.queue["reports"] will be destroyed
+  # (because key ["reports"] is not in for_each map)
+  - resource "null_resource" "queue" {
+      - id       = "8725832522511956732" -> null
+      - triggers = {
+          - "name" = "reports"
+        } -> null
+    }
+
+  # null_resource.worker[1] must be replaced
+-/+ resource "null_resource" "worker" {
+      ~ id       = "4301877753939348734" -> (known after apply)
+      ~ triggers = { # forces replacement
+          ~ "zone"    = "b" -> "c"
+            # (1 unchanged element hidden)
+        }
+    }
+
+  # null_resource.worker[2] will be destroyed
+  # (because index [2] is out of range for count)
+  - resource "null_resource" "worker" {
+      - id       = "2855439545864546091" -> null
+      - triggers = {
+          - "cluster" = "hopeful-ray"
+          - "zone"    = "c"
+        } -> null
+    }
+
+  # random_id.suffix must be replaced
+-/+ resource "random_id" "suffix" {
+      ~ b64_std     = "SaxlCA==" -> (known after apply)
+      ~ b64_url     = "SaxlCA" -> (known after apply)
+      ~ dec         = "1236034824" -> (known after apply)
+      ~ hex         = "49ac6508" -> (known after apply)
+      ~ id          = "SaxlCA" -> (known after apply)
+      ~ keepers     = { # forces replacement
+          ~ "environment" = "staging" -> "production"
+        }
+        # (1 unchanged attribute hidden)
+    }
+
+  # random_integer.port is tainted, so it must be replaced
+-/+ resource "random_integer" "port" {
+      ~ id     = "8914" -> (known after apply)
+      ~ result = 8914 -> (known after apply)
+        # (2 unchanged attributes hidden)
+    }
+
+  # random_password.db must be replaced
+-/+ resource "random_password" "db" {
+      ~ bcrypt_hash = (sensitive value)
+      ~ id          = "none" -> (known after apply)
+      ~ keepers     = { # forces replacement
+          ~ "seed" = (sensitive value)
+        }
+      ~ result      = (sensitive value)
+        # (10 unchanged attributes hidden)
+    }
+
+  # random_shuffle.az must be replaced
++/- resource "random_shuffle" "az" {
+      ~ id           = "-" -> (known after apply)
+      ~ input        = [ # forces replacement
+            # (2 unchanged elements hidden)
+            "us-east-1c",
+          + "us-east-1d",
+        ]
+      ~ result       = [
+          - "us-east-1b",
+          - "us-east-1c",
+        ] -> (known after apply)
+        # (1 unchanged attribute hidden)
+    }
+
+  # random_string.api_key will be destroyed
+  # (because random_string.api_key is not in configuration)
+  - resource "random_string" "api_key" {
+      - id          = "dySmuKFm6Gx8sAwfBvCVh0r1dk3SU9DH" -> null
+      - length      = 32 -> null
+      - lower       = true -> null
+      - min_lower   = 0 -> null
+      - min_numeric = 0 -> null
+      - min_special = 0 -> null
+      - min_upper   = 0 -> null
+      - number      = true -> null
+      - numeric     = true -> null
+      - result      = "dySmuKFm6Gx8sAwfBvCVh0r1dk3SU9DH" -> null
+      - special     = false -> null
+      - upper       = true -> null
+    }
+
+  # random_string.api_token will be created
+  + resource "random_string" "api_token" {
+      + id          = (known after apply)
+      + length      = 32
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + numeric     = true
+      + result      = (known after apply)
+      + special     = false
+      + upper       = true
+    }
+
+  # random_string.imported must be replaced
+  # (imported from "Imported0Value1")
+  # Warning: this will destroy the imported resource
+-/+ resource "random_string" "imported" {
+      ~ id          = "Imported0Value1" -> (known after apply)
+        length      = 15
+        lower       = true
+        min_lower   = 0
+        min_numeric = 0
+        min_special = 0
+        min_upper   = 0
+        number      = true
+        numeric     = true
+      ~ result      = "Imported0Value1" -> (known after apply)
+      ~ special     = true -> false # forces replacement
+        upper       = true
+    }
+
+  # random_string.session_secret has moved to random_string.session_key
+    resource "random_string" "session_key" {
+        id          = "X2zdx41iXaXvgEYP"
+        # (11 unchanged attributes hidden)
+    }
+
+  # random_uuid.legacy_id will be removed from the OpenTofu state but will not be destroyed
+  . resource "random_uuid" "legacy_id" {
+    id     = "427b8c5a-28c2-6eba-c97b-241d4bdf4d6e"
+    result = "427b8c5a-28c2-6eba-c97b-241d4bdf4d6e"
+}
+
+  # terraform_data.deploy will be updated in-place
+  ~ resource "terraform_data" "deploy" {
+        id     = "327eca9a-45b1-cf97-3007-0f5e20987de9"
+      ~ input  = {
+          ~ labels  = {
+              ~ environment = "staging" -> "production"
+                # (1 unchanged attribute hidden)
+            }
+          ~ version = "1.4.0" -> "1.5.0"
+        }
+      ~ output = {
+          - labels  = {
+              - cluster     = "hopeful-ray"
+              - environment = "staging"
+            }
+          - version = "1.4.0"
+        } -> (known after apply)
+    }
+
+  # terraform_data.migrations will be replaced due to changes in replace_triggered_by
+-/+ resource "terraform_data" "migrations" {
+      ~ id     = "2c94ef45-90ac-ea66-27d6-67a3f5ecb8b0" -> (known after apply)
+      ~ output = "schema-v7" -> (known after apply)
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.legacy.null_resource.beacon will be destroyed
+  # (because null_resource.beacon is not in configuration)
+  - resource "null_resource" "beacon" {
+      - id       = "7232937734345449462" -> null
+      - triggers = {
+          - "token" = "dChR4ZBx"
+        } -> null
+    }
+
+  # module.legacy.random_string.token will be destroyed
+  # (because random_string.token is not in configuration)
+  - resource "random_string" "token" {
+      - id          = "dChR4ZBx" -> null
+      - length      = 8 -> null
+      - lower       = true -> null
+      - min_lower   = 0 -> null
+      - min_numeric = 0 -> null
+      - min_special = 0 -> null
+      - min_upper   = 0 -> null
+      - number      = true -> null
+      - numeric     = true -> null
+      - result      = "dChR4ZBx" -> null
+      - special     = false -> null
+      - upper       = true -> null
+    }
+
+Plan: 1 to import, 13 to add, 1 to change, 15 to destroy, 1 to forget.
+
+Changes to Outputs:
+  ~ api_key         = "dySmuKFm6Gx8sAwfBvCVh0r1dk3SU9DH" -> (known after apply)
+  ~ db_password     = (sensitive value)
+  - legacy_endpoint = "legacy-dChR4ZBx.internal" -> null
+  + queue_names     = [
+      + "emails",
+      + "invoices",
+      + "orders",
+    ]
+
+Warning: Resource will be removed from the state
+
+After this plan is applied, the resource random_uuid.legacy_id will not be
+managed anymore by OpenTofu.
+
+In case you want to manage the resource again, you will have to import it.
+
+Warning: Check block assertion known after apply
+
+  on main.tf line 177, in check "port_in_range":
+ 177:     condition     = random_integer.port.result >= 8000
+    ├────────────────
+    │ random_integer.port.result is a number
+
+The condition could not be evaluated at this time, a result will be known
+when this plan is applied.

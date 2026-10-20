@@ -1,0 +1,911 @@
+aws_iam_role.app: Refreshing state... [id=storefront-prod-app]
+aws_cloudwatch_log_group.app: Refreshing state... [id=/storefront/prod/app]
+aws_route53_zone.main: Refreshing state... [id=ZODJI31YGFTP2BD11ZVTH6]
+aws_kms_key.data: Refreshing state... [id=99f52ee9-24e9-441a-8609-694b885cef5d]
+module.network.aws_vpc.this: Refreshing state... [id=vpc-be6dd4c3e96dfb9e1]
+aws_sqs_queue.orders: Refreshing state... [id=http://127.0.0.1:5055/123456789012/storefront-prod-orders]
+aws_s3_bucket.logs: Refreshing state... [id=storefront-prod-logs]
+aws_s3_bucket.assets: Refreshing state... [id=storefront-prod-assets]
+aws_instance.web: Refreshing state... [id=i-371cc8aa9fbd18528]
+aws_iam_instance_profile.app: Refreshing state... [id=storefront-prod-app]
+aws_kms_alias.data: Refreshing state... [id=alias/storefront-prod-data]
+module.network.aws_internet_gateway.this: Refreshing state... [id=igw-6094d0f7ea74ee277]
+module.network.aws_subnet.private[2]: Refreshing state... [id=subnet-0663341eadb5e333b]
+module.network.aws_subnet.public[2]: Refreshing state... [id=subnet-c4f513c0ce17f833e]
+module.network.aws_subnet.private[0]: Refreshing state... [id=subnet-0f5539793c96a173d]
+module.network.aws_subnet.public[0]: Refreshing state... [id=subnet-68e3b2434a7d76973]
+module.network.aws_subnet.private[1]: Refreshing state... [id=subnet-54f1e5340ae593e33]
+module.network.aws_subnet.public[1]: Refreshing state... [id=subnet-40ce6edc8836f9305]
+aws_security_group.alb: Refreshing state... [id=sg-157a4db26a0da5078]
+aws_lb_target_group.app: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/storefront-prod-app/b5390bfb5d664e59]
+module.network.aws_route_table.public: Refreshing state... [id=rtb-2624acf5fa63614ca]
+aws_db_subnet_group.main: Refreshing state... [id=storefront-prod-db]
+aws_security_group.app: Refreshing state... [id=sg-f7952281e15a535e6]
+aws_lb.web: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:123456789012:loadbalancer/app/storefront-prod-web/07a78cb37581773f]
+module.network.aws_route_table_association.public[1]: Refreshing state... [id=rtbassoc-bddc5600cd8f0a982]
+module.network.aws_route_table_association.public[2]: Refreshing state... [id=rtbassoc-3a75183f0d1d79115]
+module.network.aws_route_table_association.public[0]: Refreshing state... [id=rtbassoc-a45323b39cd0feca0]
+aws_security_group.db: Refreshing state... [id=sg-eb29c5943818e3600]
+aws_lb_target_group_attachment.web: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/storefront-prod-app/b5390bfb5d664e59,i-371cc8aa9fbd18528,8080]
+aws_db_instance.orders: Refreshing state... [id=db-M5ENSHXFPU6XHZ4G4ZEI5QIO2U]
+aws_route53_record.www: Refreshing state... [id=ZODJI31YGFTP2BD11ZVTH6_www.storefront.example.com_CNAME]
+aws_lb_listener.http: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:123456789012:listener/app/storefront-prod-web/07a78cb37581773f/f124f7b0163fd62a]
+aws_s3_bucket_public_access_block.assets: Refreshing state... [id=storefront-prod-assets]
+aws_s3_bucket_versioning.assets: Refreshing state... [id=storefront-prod-assets]
+aws_iam_role_policy.app: Refreshing state... [id=storefront-prod-app:app-access]
+aws_ssm_parameter.db_endpoint: Refreshing state... [id=/storefront-prod/db/endpoint]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+  ~ update in-place
+  - destroy
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # aws_cloudwatch_log_group.app will be updated in-place
+  ~ resource "aws_cloudwatch_log_group" "app" {
+        id                          = "/storefront/prod/app"
+        name                        = "/storefront/prod/app"
+      ~ retention_in_days           = 30 -> 14
+      ~ tags                        = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all                    = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+        # (7 unchanged attributes hidden)
+    }
+
+  # aws_cloudwatch_metric_alarm.db_cpu will be created
+  + resource "aws_cloudwatch_metric_alarm" "db_cpu" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_name                            = "storefront-prod-db-cpu"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + dimensions                            = {
+          + "DBInstanceIdentifier" = "storefront-prod-orders"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 3
+      + id                                    = (known after apply)
+      + metric_name                           = "CPUUtilization"
+      + namespace                             = "AWS/RDS"
+      + period                                = 300
+      + region                                = "us-east-1"
+      + statistic                             = "Average"
+      + tags_all                              = {
+          + "ManagedBy" = "terraform"
+          + "Project"   = "storefront"
+          + "Team"      = "commerce"
+        }
+      + threshold                             = 80
+      + treat_missing_data                    = "missing"
+    }
+
+  # aws_db_instance.orders must be replaced
+-/+ resource "aws_db_instance" "orders" {
+      ~ address                               = "storefront-prod-orders.aaaaaaaaaa.us-east-1.rds.amazonaws.com" -> (known after apply)
+      ~ arn                                   = "arn:aws:rds:us-east-1:123456789012:db:storefront-prod-orders" -> (known after apply)
+      ~ availability_zone                     = "us-east-1a" -> (known after apply)
+      + backup_target                         = (known after apply)
+      ~ backup_window                         = "13:14-13:44" -> (known after apply)
+      ~ ca_cert_identifier                    = "rds-ca-default" -> (known after apply)
+      + character_set_name                    = (known after apply)
+      - customer_owned_ip_enabled             = false -> null
+      + database_insights_mode                = (known after apply)
+      ~ deletion_protection                   = true -> false
+      - domain_dns_ips                        = [] -> null
+      + domain_fqdn                           = (known after apply)
+      - enabled_cloudwatch_logs_exports       = [] -> null
+      ~ endpoint                              = "storefront-prod-orders.aaaaaaaaaa.us-east-1.rds.amazonaws.com:5432" -> (known after apply)
+      + engine_lifecycle_support              = (known after apply)
+      ~ engine_version_actual                 = "16.4" -> (known after apply)
+      - final_snapshot_identifier             = "storefront-prod-orders-final" -> null
+      + hosted_zone_id                        = (known after apply)
+      - iam_database_authentication_enabled   = false -> null
+      ~ id                                    = "db-M5ENSHXFPU6XHZ4G4ZEI5QIO2U" -> (known after apply)
+      + identifier_prefix                     = (known after apply)
+      ~ iops                                  = 0 -> (known after apply)
+      + kms_key_id                            = "arn:aws:kms:us-east-1:123456789012:key/99f52ee9-24e9-441a-8609-694b885cef5d" # forces replacement
+      ~ latest_restorable_time                = "2026-10-19T06:30:06Z" -> (known after apply)
+      ~ license_model                         = "general-public-license" -> (known after apply)
+      ~ listener_endpoint                     = [] -> (known after apply)
+      ~ maintenance_window                    = "wed:06:38-wed:07:08" -> (known after apply)
+      ~ master_user_secret                    = [] -> (known after apply)
+      + master_user_secret_kms_key_id         = (known after apply)
+      - max_allocated_storage                 = 0 -> null
+      + monitoring_role_arn                   = (known after apply)
+      ~ multi_az                              = false -> (known after apply)
+      + nchar_character_set_name              = (known after apply)
+      + network_type                          = (known after apply)
+      ~ option_group_name                     = "default:postgres-16-4" -> (known after apply)
+      ~ parameter_group_name                  = "default.postgres16" -> (known after apply)
+      + performance_insights_kms_key_id       = (known after apply)
+      ~ performance_insights_retention_period = 0 -> (known after apply)
+      ~ port                                  = 5432 -> (known after apply)
+      + replica_mode                          = (known after apply)
+      ~ replicas                              = [] -> (known after apply)
+      ~ resource_id                           = "db-M5ENSHXFPU6XHZ4G4ZEI5QIO2U" -> (known after apply)
+      ~ skip_final_snapshot                   = false -> true
+      + snapshot_identifier                   = (known after apply)
+      ~ status                                = "available" -> (known after apply)
+      ~ storage_encrypted                     = false -> true # forces replacement
+      ~ storage_throughput                    = 0 -> (known after apply)
+      ~ storage_type                          = "gp2" -> (known after apply)
+      - tags                                  = {
+          - "Team" = "platform"
+        } -> null
+      ~ tags_all                              = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+      + timezone                              = (known after apply)
+      + upgrade_rollout_order                 = (known after apply)
+        # (27 unchanged attributes hidden)
+    }
+
+  # aws_db_subnet_group.main will be updated in-place
+  ~ resource "aws_db_subnet_group" "main" {
+        id                      = "storefront-prod-db"
+        name                    = "storefront-prod-db"
+      ~ subnet_ids              = [
+          - "subnet-0663341eadb5e333b",
+          - "subnet-0f5539793c96a173d",
+          - "subnet-54f1e5340ae593e33",
+        ] -> (known after apply)
+      ~ tags                    = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all                = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+        # (6 unchanged attributes hidden)
+    }
+
+  # aws_iam_instance_profile.app will be updated in-place
+  ~ resource "aws_iam_instance_profile" "app" {
+        id          = "storefront-prod-app"
+        name        = "storefront-prod-app"
+      ~ tags        = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all    = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+        # (6 unchanged attributes hidden)
+    }
+
+  # aws_iam_role.app will be updated in-place
+  ~ resource "aws_iam_role" "app" {
+        id                    = "storefront-prod-app"
+        name                  = "storefront-prod-app"
+      ~ tags                  = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all              = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+        # (11 unchanged attributes hidden)
+
+        # (1 unchanged block hidden)
+    }
+
+  # aws_iam_role_policy.app will be updated in-place
+  ~ resource "aws_iam_role_policy" "app" {
+        id          = "storefront-prod-app:app-access"
+        name        = "app-access"
+      ~ policy      = jsonencode(
+          ~ {
+              ~ Statement = [
+                    # (1 unchanged element hidden)
+                    {
+                        Action   = [
+                            "sqs:SendMessage",
+                        ]
+                        Effect   = "Allow"
+                        Resource = [
+                            "arn:aws:sqs:us-east-1:123456789012:storefront-prod-orders",
+                        ]
+                        Sid      = "PublishOrders"
+                    },
+                  + {
+                      + Action   = [
+                          + "s3:*",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = [
+                          + "*",
+                        ]
+                      + Sid      = "DebugEverything"
+                    },
+                ]
+                # (1 unchanged attribute hidden)
+            }
+        )
+        # (2 unchanged attributes hidden)
+    }
+
+  # aws_instance.app will be created
+  + resource "aws_instance" "app" {
+      + ami                                  = "ami-1e749f67"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = "storefront-prod-app"
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.small"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = (known after apply)
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-1"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = "subnet-0f5539793c96a173d"
+      + tags                                 = {
+          + "Name" = "storefront-prod-web"
+        }
+      + tags_all                             = {
+          + "ManagedBy" = "terraform"
+          + "Name"      = "storefront-prod-web"
+          + "Project"   = "storefront"
+          + "Team"      = "commerce"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = [
+          + "sg-f7952281e15a535e6",
+        ]
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device (known after apply)
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # aws_instance.web will be destroyed
+  # (because aws_instance.web is not in configuration)
+  - resource "aws_instance" "web" {
+      - ami                                  = "ami-1e749f67" -> null
+      - arn                                  = "arn:aws:ec2:us-east-1::instance/i-371cc8aa9fbd18528" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-1a" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - iam_instance_profile                 = "storefront-prod-app" -> null
+      - id                                   = "i-371cc8aa9fbd18528" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.small" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-f9d784890f2e703f9" -> null
+      - private_dns                          = "ip-10-20-10-4.ec2.internal" -> null
+      - private_ip                           = "10.20.10.4" -> null
+      - region                               = "us-east-1" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-0f5539793c96a173d" -> null
+      - tags                                 = {
+          - "Name" = "storefront-prod-web"
+          - "Team" = "platform"
+        } -> null
+      - tags_all                             = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "storefront-prod-web"
+          - "Project"   = "storefront"
+          - "Team"      = "platform"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-f7952281e15a535e6",
+        ] -> null
+        # (10 unchanged attributes hidden)
+
+      - credit_specification {
+          - cpu_credits = "standard" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 1 -> null
+          - http_tokens                 = "optional" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = false -> null
+          - network_interface_id  = "eni-f9d784890f2e703f9" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/sda1" -> null
+          - encrypted             = false -> null
+          - iops                  = 0 -> null
+          - tags                  = {
+              - "ManagedBy" = "terraform"
+              - "Project"   = "storefront"
+              - "Team"      = "platform"
+            } -> null
+          - tags_all              = {
+              - "ManagedBy" = "terraform"
+              - "Project"   = "storefront"
+              - "Team"      = "platform"
+            } -> null
+          - throughput            = 0 -> null
+          - volume_id             = "vol-c4f45a8454d3887fe" -> null
+          - volume_size           = 8 -> null
+          - volume_type           = "gp2" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # aws_kms_key.data will be updated in-place
+  ~ resource "aws_kms_key" "data" {
+        id                                 = "99f52ee9-24e9-441a-8609-694b885cef5d"
+      ~ tags                               = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all                           = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+        # (15 unchanged attributes hidden)
+    }
+
+  # aws_lb.web will be updated in-place
+  ~ resource "aws_lb" "web" {
+        id                                                           = "arn:aws:elasticloadbalancing:us-east-1:123456789012:loadbalancer/app/storefront-prod-web/07a78cb37581773f"
+        name                                                         = "storefront-prod-web"
+      ~ subnets                                                      = [
+          - "subnet-40ce6edc8836f9305",
+          - "subnet-68e3b2434a7d76973",
+          - "subnet-c4f513c0ce17f833e",
+        ] -> (known after apply)
+      ~ tags                                                         = {
+          - "Owner" = "alice" -> null
+          - "Team"  = "platform" -> null
+        }
+      ~ tags_all                                                     = {
+          - "Owner"     = "alice" -> null
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+        # (27 unchanged attributes hidden)
+
+      ~ subnet_mapping (known after apply)
+      - subnet_mapping {
+          - subnet_id            = "subnet-40ce6edc8836f9305" -> null
+            # (4 unchanged attributes hidden)
+        }
+      - subnet_mapping {
+          - subnet_id            = "subnet-68e3b2434a7d76973" -> null
+            # (4 unchanged attributes hidden)
+        }
+      - subnet_mapping {
+          - subnet_id            = "subnet-c4f513c0ce17f833e" -> null
+            # (4 unchanged attributes hidden)
+        }
+
+        # (3 unchanged blocks hidden)
+    }
+
+  # aws_lb_listener.http will be updated in-place
+  ~ resource "aws_lb_listener" "http" {
+        id                       = "arn:aws:elasticloadbalancing:us-east-1:123456789012:listener/app/storefront-prod-web/07a78cb37581773f/f124f7b0163fd62a"
+      ~ tags                     = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all                 = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+        # (7 unchanged attributes hidden)
+
+        # (1 unchanged block hidden)
+    }
+
+  # aws_lb_target_group.app will be updated in-place
+  ~ resource "aws_lb_target_group" "app" {
+        id                                 = "arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/storefront-prod-app/b5390bfb5d664e59"
+        name                               = "storefront-prod-app"
+      ~ tags                               = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all                           = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+        # (18 unchanged attributes hidden)
+
+        # (5 unchanged blocks hidden)
+    }
+
+  # aws_lb_target_group_attachment.web must be replaced
+-/+ resource "aws_lb_target_group_attachment" "web" {
+      ~ id               = "arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/storefront-prod-app/b5390bfb5d664e59,i-371cc8aa9fbd18528,8080" -> (known after apply)
+      ~ target_id        = "i-371cc8aa9fbd18528" -> (known after apply) # forces replacement
+        # (3 unchanged attributes hidden)
+    }
+
+  # aws_route53_record.www will be updated in-place
+  ~ resource "aws_route53_record" "www" {
+        id                               = "ZODJI31YGFTP2BD11ZVTH6_www.storefront.example.com_CNAME"
+        name                             = "www.storefront.example.com"
+      ~ ttl                              = 300 -> 60
+        # (7 unchanged attributes hidden)
+    }
+
+  # aws_route53_zone.main will be updated in-place
+  ~ resource "aws_route53_zone" "main" {
+        id                          = "ZODJI31YGFTP2BD11ZVTH6"
+        name                        = "storefront.example.com"
+      ~ tags                        = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all                    = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+        # (8 unchanged attributes hidden)
+    }
+
+  # aws_s3_bucket.assets will be updated in-place
+  ~ resource "aws_s3_bucket" "assets" {
+        id                          = "storefront-prod-assets"
+        tags                        = {}
+      ~ tags_all                    = {
+          + "ManagedBy" = "terraform"
+          + "Project"   = "storefront"
+          + "Team"      = "commerce"
+        }
+        # (14 unchanged attributes hidden)
+
+        # (2 unchanged blocks hidden)
+    }
+
+  # aws_s3_bucket.logs will be destroyed
+  # (because aws_s3_bucket.logs is not in configuration)
+  - resource "aws_s3_bucket" "logs" {
+      - arn                         = "arn:aws:s3:::storefront-prod-logs" -> null
+      - bucket                      = "storefront-prod-logs" -> null
+      - bucket_domain_name          = "storefront-prod-logs.s3.amazonaws.com" -> null
+      - bucket_namespace            = "global" -> null
+      - bucket_region               = "us-east-1" -> null
+      - bucket_regional_domain_name = "storefront-prod-logs.s3.us-east-1.amazonaws.com" -> null
+      - force_destroy               = true -> null
+      - hosted_zone_id              = "Z3AQBSTGFYJSTF" -> null
+      - id                          = "storefront-prod-logs" -> null
+      - object_lock_enabled         = false -> null
+      - region                      = "us-east-1" -> null
+      - tags                        = {} -> null
+      - tags_all                    = {} -> null
+        # (4 unchanged attributes hidden)
+
+      - grant {
+          - id          = "75aa57f09aa0c8caeab4f8c24e99d10f8e7faeebf76c078efc7c6caea54ba06a" -> null
+          - permissions = [
+              - "FULL_CONTROL",
+            ] -> null
+          - type        = "CanonicalUser" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - versioning {
+          - enabled    = false -> null
+          - mfa_delete = false -> null
+        }
+    }
+
+  # aws_s3_bucket_public_access_block.assets will be updated in-place
+  ~ resource "aws_s3_bucket_public_access_block" "assets" {
+      ~ block_public_policy     = true -> false
+        id                      = "storefront-prod-assets"
+      ~ restrict_public_buckets = true -> false
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_security_group.alb will be updated in-place
+  ~ resource "aws_security_group" "alb" {
+        id                     = "sg-157a4db26a0da5078"
+      ~ ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = "hotfix: partner callback"
+              - from_port        = 8443
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 8443
+            },
+            # (2 unchanged elements hidden)
+        ]
+        name                   = "storefront-prod-alb"
+      ~ tags                   = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all               = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+        # (8 unchanged attributes hidden)
+    }
+
+  # aws_security_group.app will be updated in-place
+  ~ resource "aws_security_group" "app" {
+        id                     = "sg-f7952281e15a535e6"
+      ~ ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "TEMP: debug access"
+              + from_port        = 22
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 22
+            },
+            # (1 unchanged element hidden)
+        ]
+        name                   = "storefront-prod-app"
+      ~ tags                   = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all               = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+        # (8 unchanged attributes hidden)
+    }
+
+  # aws_security_group.db will be updated in-place
+  ~ resource "aws_security_group" "db" {
+        id                     = "sg-eb29c5943818e3600"
+        name                   = "storefront-prod-db"
+      ~ tags                   = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all               = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+        # (9 unchanged attributes hidden)
+    }
+
+  # aws_sns_topic.alerts will be created
+  + resource "aws_sns_topic" "alerts" {
+      + arn                         = (known after apply)
+      + beginning_archive_time      = (known after apply)
+      + content_based_deduplication = false
+      + fifo_throughput_scope       = (known after apply)
+      + fifo_topic                  = false
+      + id                          = (known after apply)
+      + maximum_message_size        = (known after apply)
+      + name                        = "storefront-prod-alerts"
+      + name_prefix                 = (known after apply)
+      + owner                       = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "us-east-1"
+      + signature_version           = (known after apply)
+      + tags_all                    = {
+          + "ManagedBy" = "terraform"
+          + "Project"   = "storefront"
+          + "Team"      = "commerce"
+        }
+      + tracing_config              = (known after apply)
+    }
+
+  # aws_sqs_queue.orders will be updated in-place
+  ~ resource "aws_sqs_queue" "orders" {
+        id                                = "http://127.0.0.1:5055/123456789012/storefront-prod-orders"
+        name                              = "storefront-prod-orders"
+      ~ tags                              = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all                          = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+      ~ visibility_timeout_seconds        = 30 -> 60
+        # (18 unchanged attributes hidden)
+    }
+
+  # aws_ssm_parameter.db_endpoint will be updated in-place
+  ~ resource "aws_ssm_parameter" "db_endpoint" {
+        id              = "/storefront-prod/db/endpoint"
+        name            = "/storefront-prod/db/endpoint"
+      ~ tags            = {
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all        = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (2 unchanged elements hidden)
+        }
+      ~ value           = (sensitive value)
+      ~ version         = 1 -> (known after apply)
+        # (10 unchanged attributes hidden)
+    }
+
+  # module.network.aws_internet_gateway.this will be updated in-place
+  ~ resource "aws_internet_gateway" "this" {
+        id       = "igw-6094d0f7ea74ee277"
+      ~ tags     = {
+            "Name" = "storefront-prod"
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (3 unchanged elements hidden)
+        }
+        # (4 unchanged attributes hidden)
+    }
+
+  # module.network.aws_route_table.public will be updated in-place
+  ~ resource "aws_route_table" "public" {
+        id               = "rtb-2624acf5fa63614ca"
+      ~ tags             = {
+            "Name" = "storefront-prod-public"
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all         = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (3 unchanged elements hidden)
+        }
+        # (6 unchanged attributes hidden)
+    }
+
+  # module.network.aws_route_table_association.public[1] must be replaced
+-/+ resource "aws_route_table_association" "public" {
+      ~ id             = "rtbassoc-bddc5600cd8f0a982" -> (known after apply)
+      ~ subnet_id      = "subnet-40ce6edc8836f9305" -> (known after apply) # forces replacement
+        # (3 unchanged attributes hidden)
+    }
+
+  # module.network.aws_route_table_association.public[2] will be destroyed
+  # (because index [2] is out of range for count)
+  - resource "aws_route_table_association" "public" {
+      - id             = "rtbassoc-3a75183f0d1d79115" -> null
+      - region         = "us-east-1" -> null
+      - route_table_id = "rtb-2624acf5fa63614ca" -> null
+      - subnet_id      = "subnet-c4f513c0ce17f833e" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.network.aws_subnet.private[0] will be updated in-place
+  ~ resource "aws_subnet" "private" {
+        id                                             = "subnet-0f5539793c96a173d"
+      ~ tags                                           = {
+            "Name" = "storefront-prod-private-us-east-1a"
+          - "Team" = "platform" -> null
+            "Tier" = "private"
+        }
+      ~ tags_all                                       = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (4 unchanged elements hidden)
+        }
+        # (20 unchanged attributes hidden)
+    }
+
+  # module.network.aws_subnet.private[1] must be replaced
+-/+ resource "aws_subnet" "private" {
+      ~ arn                                            = "arn:aws:ec2:us-east-1:123456789012:subnet/subnet-54f1e5340ae593e33" -> (known after apply)
+      ~ availability_zone                              = "us-east-1b" -> "us-east-1c" # forces replacement
+      ~ availability_zone_id                           = "use1-az1" -> (known after apply)
+      - enable_lni_at_device_index                     = 0 -> null
+      ~ id                                             = "subnet-54f1e5340ae593e33" -> (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      - map_customer_owned_ip_on_launch                = false -> null
+      ~ owner_id                                       = "123456789012" -> (known after apply)
+      ~ private_dns_hostname_type_on_launch            = "ip-name" -> (known after apply)
+      ~ tags                                           = {
+          ~ "Name" = "storefront-prod-private-us-east-1b" -> "storefront-prod-private-us-east-1c"
+          - "Team" = "platform" -> null
+            "Tier" = "private"
+        }
+      ~ tags_all                                       = {
+          ~ "Name"      = "storefront-prod-private-us-east-1b" -> "storefront-prod-private-us-east-1c"
+          ~ "Team"      = "platform" -> "commerce"
+            # (3 unchanged elements hidden)
+        }
+        # (11 unchanged attributes hidden)
+    }
+
+  # module.network.aws_subnet.private[2] will be destroyed
+  # (because index [2] is out of range for count)
+  - resource "aws_subnet" "private" {
+      - arn                                            = "arn:aws:ec2:us-east-1:123456789012:subnet/subnet-0663341eadb5e333b" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1c" -> null
+      - availability_zone_id                           = "use1-az2" -> null
+      - cidr_block                                     = "10.20.12.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-0663341eadb5e333b" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = false -> null
+      - owner_id                                       = "123456789012" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - region                                         = "us-east-1" -> null
+      - tags                                           = {
+          - "Name" = "storefront-prod-private-us-east-1c"
+          - "Team" = "platform"
+          - "Tier" = "private"
+        } -> null
+      - tags_all                                       = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "storefront-prod-private-us-east-1c"
+          - "Project"   = "storefront"
+          - "Team"      = "platform"
+          - "Tier"      = "private"
+        } -> null
+      - vpc_id                                         = "vpc-be6dd4c3e96dfb9e1" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # module.network.aws_subnet.public[0] will be updated in-place
+  ~ resource "aws_subnet" "public" {
+        id                                             = "subnet-68e3b2434a7d76973"
+      ~ tags                                           = {
+            "Name" = "storefront-prod-public-us-east-1a"
+          - "Team" = "platform" -> null
+            "Tier" = "public"
+        }
+      ~ tags_all                                       = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (4 unchanged elements hidden)
+        }
+        # (20 unchanged attributes hidden)
+    }
+
+  # module.network.aws_subnet.public[1] must be replaced
+-/+ resource "aws_subnet" "public" {
+      ~ arn                                            = "arn:aws:ec2:us-east-1:123456789012:subnet/subnet-40ce6edc8836f9305" -> (known after apply)
+      ~ availability_zone                              = "us-east-1b" -> "us-east-1c" # forces replacement
+      ~ availability_zone_id                           = "use1-az1" -> (known after apply)
+      - enable_lni_at_device_index                     = 0 -> null
+      ~ id                                             = "subnet-40ce6edc8836f9305" -> (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      - map_customer_owned_ip_on_launch                = false -> null
+      ~ owner_id                                       = "123456789012" -> (known after apply)
+      ~ private_dns_hostname_type_on_launch            = "ip-name" -> (known after apply)
+      ~ tags                                           = {
+          ~ "Name" = "storefront-prod-public-us-east-1b" -> "storefront-prod-public-us-east-1c"
+          - "Team" = "platform" -> null
+            "Tier" = "public"
+        }
+      ~ tags_all                                       = {
+          ~ "Name"      = "storefront-prod-public-us-east-1b" -> "storefront-prod-public-us-east-1c"
+          ~ "Team"      = "platform" -> "commerce"
+            # (3 unchanged elements hidden)
+        }
+        # (11 unchanged attributes hidden)
+    }
+
+  # module.network.aws_subnet.public[2] will be destroyed
+  # (because index [2] is out of range for count)
+  - resource "aws_subnet" "public" {
+      - arn                                            = "arn:aws:ec2:us-east-1:123456789012:subnet/subnet-c4f513c0ce17f833e" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1c" -> null
+      - availability_zone_id                           = "use1-az2" -> null
+      - cidr_block                                     = "10.20.2.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-c4f513c0ce17f833e" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "123456789012" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - region                                         = "us-east-1" -> null
+      - tags                                           = {
+          - "Name" = "storefront-prod-public-us-east-1c"
+          - "Team" = "platform"
+          - "Tier" = "public"
+        } -> null
+      - tags_all                                       = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "storefront-prod-public-us-east-1c"
+          - "Project"   = "storefront"
+          - "Team"      = "platform"
+          - "Tier"      = "public"
+        } -> null
+      - vpc_id                                         = "vpc-be6dd4c3e96dfb9e1" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # module.network.aws_vpc.this will be updated in-place
+  ~ resource "aws_vpc" "this" {
+        id                                   = "vpc-be6dd4c3e96dfb9e1"
+      ~ tags                                 = {
+            "Name" = "storefront-prod"
+          - "Team" = "platform" -> null
+        }
+      ~ tags_all                             = {
+          ~ "Team"      = "platform" -> "commerce"
+            # (3 unchanged elements hidden)
+        }
+        # (19 unchanged attributes hidden)
+    }
+
+Plan: 8 to add, 23 to change, 10 to destroy.
+
+Changes to Outputs:
+  ~ db_endpoint = "storefront-prod-orders.aaaaaaaaaa.us-east-1.rds.amazonaws.com" -> (known after apply)
+  - logs_bucket = "storefront-prod-logs" -> null

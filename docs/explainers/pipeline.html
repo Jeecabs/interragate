@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en-GB"><meta charset="utf-8"><meta name="viewport" content="width=800"><title>How interragate works</title><link rel="stylesheet" href="shared.css"><main class="pipeline"></main>
+<script type="module">
+// Architecture labels: README "How it works", internal/{diff,graph,analysis,rules},
+// internal/source/source.go, internal/gitdiff and the CLI's emit function.
+import {load, finish, escape, change} from './shared.mjs';
+const r=await load(), db=change(r,'aws_db_instance.orders');
+await finish(`<h1>How interragate works</h1><p class="tagline">Deterministic, with no model in the loop.</p>
+<figure class="pipeline-figure" aria-label="Plan JSON through diff, graph, analysis and rules to five output formats; configuration and git feed analysis">
+<svg class="connectors" viewBox="0 0 720 360" fill="none" aria-hidden="true"><defs><marker id="arrow" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="m1 1 5 3-5 3" stroke="currentColor" stroke-width="1.2"/></marker></defs><g stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow)"><path d="M106 170h32"/><path d="M268 170h28"/><path d="M435 170h30"/><path d="M582 170h28"/><path d="M474 85v22h51v29"/><path d="M654 85v22H525v29"/><path d="M655 212v58H360v17"/></g></svg>
+<div class="input" style="left:410px"><h3><code>.tf</code> files</h3><p>file:line · locals</p><p><code>${escape(db.location.file)}:${db.location.line}</code></p></div>
+<div class="input" style="left:600px"><h3>git</h3><p>the edit behind<br>each change</p></div>
+<div class="stage" style="left:0;width:106px"><h2>Plan JSON</h2><p class="detail mono">terraform<br>show -json</p></div>
+<div class="stage" style="left:155px;width:112px"><h2>Structural<br>diff</h2><p class="detail">masks, JSON,<br>lists, lines</p></div>
+<div class="stage" style="left:312px;width:122px"><h2>Dependency<br>graph</h2><p class="detail">references,<br>modules, locals</p></div>
+<div class="stage" style="left:484px;width:97px"><h2>Analysis</h2><p class="detail">causes, drift,<br>patterns</p></div>
+<div class="stage" style="left:626px;width:94px"><h2>Rules</h2><p class="detail">${r.findings.length} findings</p></div>
+<p class="meta" style="position:absolute;top:292px;left:0;right:0;text-align:center">Outputs</p>
+<div class="outputs" style="top:327px"><span>Terminal</span><span>Markdown</span><span>SARIF</span><span>JSON</span><span>HTML</span></div>
+</figure>`);
+</script></html>

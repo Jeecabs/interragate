@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en-GB"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>interragate · the social card</title><link rel="stylesheet" href="shared.css"><link rel="stylesheet" href="landing.css"><main></main>
+<script type="module">
+import {load, finish, escape, severity, mark, square} from './shared.mjs';
+const panel=new URLSearchParams(location.search).get('panel');
+const r=await load();
+document.documentElement.classList.add('landing', panel);
+if(panel==='social') {
+  const s=r.summary;
+  await finish(`<div class="social-brand">${mark}<span>interragate</span></div><p class="social-line">Terraform and OpenTofu plans,<br>explained before you apply.</p><div class="social-verdict">${severity(r.risk.level)}<p>${escape(r.risk.headline)}</p><div class="social-counts">${[['delete','destroyed'],['replace','replaced'],['update','updated'],['create','created']].map(([action,label])=>`<span>${square(action)}<b>${s[action]}</b> ${label}</span>`).join('')}</div></div>`);
+} else throw new Error(`Unknown landing panel: ${panel}`);
+</script></html>

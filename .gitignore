@@ -1,0 +1,25 @@
+/interragate
+/dist/
+/_site/
+interragate-report.html
+*.tfplan
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfstate.*
+*.tfplan.*
+crash.log
+crash.*.log
+.env
+.env.*
+!.env.example
+__pycache__/
+.DS_Store
+*.pem
+*.key
+
+# claude plugin eval results
+/plugins/interragate/evals/results/
+
+# apm pack's bundles
+/plugins/interragate/build/

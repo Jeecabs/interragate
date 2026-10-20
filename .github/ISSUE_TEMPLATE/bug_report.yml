@@ -1,0 +1,24 @@
+name: Bug report
+description: Report incorrect analysis, a crash or a command that fails.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Include what you expected and what interragate actually did.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Give the command and a small synthetic configuration or plan. Remove credentials and infrastructure details.
+    validations:
+      required: true
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions
+      description: Include interragate version, your operating system, and terraform version or tofu version.
+    validations:
+      required: true

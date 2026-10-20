@@ -1,0 +1,12 @@
+/* Site figures share the report's type, action colours and severity shapes. */
+html.landing, .landing body, .landing main { width: 800px; }
+.landing main { padding: 34px 40px; }
+html.social, .social body, .social main { width: 1200px; height: 630px; }
+.social main { padding: 62px 72px; border-radius: 0; }
+.social-brand { font: 400 85px/1 'Geist Pixel'; display: flex; align-items: center; gap: 22px; letter-spacing: -.04em; }
+.social-brand .mark { width: 64px; height: 64px; }
+.social-line { font-size: 32px; line-height: 1.25; margin-top: 30px; letter-spacing: -.025em; }
+.social-verdict { margin-top: 42px; padding-top: 26px; border-top: 1px solid var(--rule); }
+.social-verdict > p { font-size: 25px; line-height: 1.35; max-width: 950px; margin-top: 12px; }
+.social-counts { display: flex; gap: 30px; margin-top: 24px; font-size: 17px; }
+.social-counts > span { display: flex; align-items: center; gap: 8px; }

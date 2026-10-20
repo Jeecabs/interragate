@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en-GB"><meta charset="utf-8"><meta name="viewport" content="width=800"><title>The same plan, read for what it means</title><link rel="stylesheet" href="shared.css"><main class="meaning"></main>
+<script type="module">
+import {load, finish, rich, escape, severity, narrative, change} from './shared.mjs';
+const r = await load();
+const p = await (await fetch('../../testdata/plans/aws-webapp.terraform.json')).json();
+const raw = address => p.resource_changes.find(c => c.address===address).change;
+const db = raw('aws_db_instance.orders'), bucket = raw('aws_s3_bucket.logs');
+if (!db.replace_paths.some(p=>p.join('.')==='storage_encrypted') || !raw('aws_ssm_parameter.db_endpoint').after_unknown.value) throw new Error('Sample excerpt no longer matches the plan');
+const dbText = `-/+ resource "aws_db_instance" "orders" {\n  ~ storage_encrypted = ${db.before.storage_encrypted} -> ${db.after.storage_encrypted} # forces replacement\n  ~ deletion_protection = ${db.before.deletion_protection} -> ${db.after.deletion_protection}\n    …\n}`;
+const ssmText = `~ resource "aws_ssm_parameter" "db_endpoint" {\n  ~ value = (sensitive value)\n    …\n}`;
+const bucketText = `- resource "aws_s3_bucket" "logs" {\n  - force_destroy = ${bucket.before.force_destroy} -> null\n    …\n}`;
+await finish(`<h1>The same plan, read for what it means</h1>
+<div class="columns compare-row"><p class="say">terraform plan says</p><pre class="raw"><span class="action-replace">${escape(dbText)}</span></pre><p class="say">interragate says</p><div class="explanation rich two-consequences"><div>${severity('critical')}<p>${rich(narrative(r,'Replacing').text)}</p></div><div class="fail">${severity('high','High · Apply will fail')}<p>${rich(narrative(r,'The apply will fail').text)}</p></div></div></div>
+<div class="columns compare-row"><pre class="raw"><span class="action-update">${escape(ssmText)}</span></pre><div class="explanation rich"><h3 style="margin-bottom:9px">${escape('aws_ssm_parameter.db_endpoint')}</h3><p>${rich(change(r,'aws_ssm_parameter.db_endpoint').why)}</p></div></div>
+<div class="columns compare-row"><pre class="raw"><span class="action-delete">${escape(bucketText)}</span></pre><div class="explanation rich">${severity('critical')}<p>${rich(narrative(r,'Destroying').text)}</p></div></div>
+<p class="note">${escape(r.plan.dir)} · ${escape(r.plan.source)}</p>`);
+</script></html>

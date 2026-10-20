@@ -1,0 +1,61 @@
+{{define "head"}}<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f7f6f3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f0f0e" media="(prefers-color-scheme: dark)">
+<title>{{.Title}}</title>
+{{with .About}}<meta name="description" content="{{.}}">
+<meta property="og:description" content="{{.}}">
+{{end}}<link rel="canonical" href="{{.Published}}{{.Path}}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="interragate">
+<meta property="og:title" content="{{.Title}}">
+<meta property="og:url" content="{{.Published}}{{.Path}}">
+<meta property="og:image" content="{{.Published}}og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="interragate: Terraform and OpenTofu plans, explained before you apply">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="{{.Root}}mark.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{{.Root}}apple-touch-icon.png">
+<link rel="preload" href="{{.Root}}fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{{.Root}}style.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+{{end}}
+
+{{define "mark"}}<svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.35" fill="none" stroke="currentColor" stroke-opacity=".22" stroke-width="1.3"/><circle cx="12" cy="12" r="6.6" fill="none" stroke="currentColor" stroke-opacity=".5" stroke-width="1.3"/><circle cx="12" cy="12" r="2.75" fill="currentColor"/></svg>{{end}}
+
+{{define "header"}}
+<a class="skip" href="#main">Skip to the content</a>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="{{.Root}}" aria-label="interragate, home">{{template "mark"}}<span>interragate</span></a>
+    <nav class="nav" aria-label="Site">
+      <a href="{{.Root}}demo/">Live report</a>
+      <a href="{{.Root}}rules/"{{if eq .Path "rules/"}} aria-current="page"{{end}}>Rules</a>
+      <a class="wide" href="{{.Root}}#install">Install</a>
+      <a href="https://github.com/Jeecabs/interragate">GitHub</a>
+    </nav>
+  </div>
+</header>
+{{end}}
+
+{{define "footer"}}
+<footer class="foot">
+  <div class="wrap foot-in">
+    <a class="brand" href="{{.Root}}" aria-label="interragate, home">{{template "mark"}}<span>interragate</span></a>
+    <nav class="foot-links" aria-label="More">
+      <a href="{{.Root}}rules/">Rules</a>
+      <a href="{{.Root}}demo/mechanics/">Another sample</a>
+      <a href="https://github.com/Jeecabs/interragate">GitHub</a>
+    </nav>
+  </div>
+</footer>
+<script src="{{.Root}}site.js" defer></script>
+</body>
+</html>
+{{end}}

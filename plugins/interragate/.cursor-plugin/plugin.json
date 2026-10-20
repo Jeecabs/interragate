@@ -1,0 +1,19 @@
+{
+  "name": "interragate",
+  "version": "0.1.0",
+  "description": "Review Terraform and OpenTofu plans before you apply them: what each change means, what destroys data, what only changes because something else does, where the apply will fail, and which changes no edit explains.",
+  "author": {
+    "name": "Jeecabs"
+  },
+  "license": "AGPL-3.0-only",
+  "homepage": "https://jeecabs.github.io/interragate/",
+  "repository": "https://github.com/Jeecabs/interragate",
+  "keywords": [
+    "terraform",
+    "opentofu",
+    "infrastructure-as-code",
+    "plan",
+    "review"
+  ],
+  "logo": "./assets/logo.svg"
+}

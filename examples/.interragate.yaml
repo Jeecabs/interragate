@@ -1,0 +1,62 @@
+# Example .interragate.yaml. interragate uses the nearest one, searching up to the git root.
+
+# Lowest severity that makes `interragate check` exit 2.
+fail_on: high
+
+# Turn rules off entirely.
+disable:
+  - provider-unpinned
+
+# Change how severe a rule is.
+severity:
+  dns-change: high
+  final-snapshot-disabled: low
+
+# Every created or updated resource must carry these tags (via tags or default_tags).
+required_tags: [Owner, CostCenter]
+
+# Resource types (beyond the built-in list) whose destruction loses data.
+stateful:
+  - mycorp_database
+
+# Per-rule settings.
+rules:
+  mass-destroy:
+    threshold: 10
+  large-blast-radius:
+    threshold: 15
+
+# Accepted risks. A finding is suppressed only when every address it names
+# matches; * matches any run of characters.
+ignore:
+  - rule: stateful-replace
+    address: aws_db_instance.scratch*
+    reason: throwaway database for load tests
+  - rule: "*"
+    address: module.sandbox.*
+    reason: sandbox environment
+
+# Your own rules. A policy flags every resource change it matches as a
+# finding, so fail_on, disable, severity and ignore work on it by its id.
+policies:
+  - id: prod-db-kept
+    title: Production databases are never replaced or destroyed
+    severity: critical
+    message: Talk to the platform team before replacing a production database.
+    remediation: Restore from the nightly snapshot instead, or add lifecycle { prevent_destroy = true }.
+    match:
+      type: [aws_db_instance, aws_rds_cluster]
+      address: "module.prod.*"
+      action: [delete, replace]
+
+  - id: engine-upgrades-scheduled
+    title: Database engine upgrades are scheduled with the on-call team
+    severity: medium
+    message: An engine upgrade restarts the database and cannot be rolled back.
+    match:
+      category: database
+      action: update
+    # Conditions on the planned object; every one must hold.
+    when:
+      - attribute: engine_version
+        changes: true

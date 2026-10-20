@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en-GB"><meta charset="utf-8"><meta name="viewport" content="width=800"><title>When you apply</title><link rel="stylesheet" href="shared.css"><main class="apply"></main>
+<script type="module">
+import {load, finish, rich, escape, severity, square, applyModel} from './shared.mjs';
+const r=await load(), a=r.apply, steps=a.steps;
+const {failure,skippedIDs,stranded,skippedResources}=applyModel(r);
+const rows=[
+ {address:failure.address, op:'destroy'},
+ {address:failure.address, op:'create'},
+ {address:'aws_ssm_parameter.db_endpoint', op:'update'},
+ ...stranded.map(c=>({address:c.address}))
+];
+const scale=s=>s/a.duration*100;
+const duration=s=>s.duration>=60?`${s.duration/60} min`:`${s.duration} sec`;
+function operation(s) {
+ const skipped=skippedIDs.has(s.id), long=s.duration>=300;
+ const left=Math.min(scale(s.start),100-18/720*100), width=Math.max(scale(s.duration),18/720*100);
+ const label=`${s.op}${long?` · ${duration(s)}`:''}${skipped?' · skipped':''}`;
+ return `<span class="gantt-bar ${s.op}${skipped?' skipped':''}" style="left:${left}%;width:${width}%" title="${escape(s.id)}: ${s.start}s + ${s.duration}s${skipped?', skipped':''}"></span><span class="bar-label${s.start>600?' before':''}" style="${s.start>600?`right:${100-left+1}%`:`left:calc(${left}% + ${long?12:25}px)`}">${label}</span>${s.fails?`<span class="stop" style="left:${scale(s.start+s.duration)}%"></span>`:''}`;
+}
+const gantt=rows.map(row=>{
+ const selected=steps.filter(s=>s.address===row.address&&(!row.op||s.op===row.op));
+ const gap=!row.op&&(a.gaps||[]).find(g=>g.address===row.address);
+ const blocked=selected.every(s=>skippedIDs.has(s.id));
+ return `<div class="gantt-row${blocked?' blocked':''}"><span class="gantt-label">${escape(row.address)}</span><div class="gantt-track">${gap?`<svg class="gantt-gap" style="left:${scale(gap.from)}%;width:${scale(gap.to-gap.from)}%" aria-hidden="true"><rect width="100%" height="100%" fill="url(#absent)"/></svg>`:''}${selected.map(operation).join('')}</div></div>`;
+}).join('');
+const firstSentence=a.narrative[0].text.split('. The ')[0]+'.';
+await finish(`<h1>When you apply</h1>${severity('high','High · Expected to fail')}<p class="prediction rich">${rich(firstSentence)}</p>
+<div class="timeline-top"><p class="meta">Typical durations</p><p class="meta">${skippedResources} resources skipped</p></div>
+<figure class="timeline" aria-label="Database destroy expected to fail; database create, parameter update and replacement creates skipped">
+<svg class="pattern-defs" aria-hidden="true"><defs><pattern id="absent" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M-2 2 2-2M0 7 7 0M5 9 9 5" fill="none" stroke="var(--act-delete)" stroke-width="1.5" stroke-opacity=".55"/></pattern></defs></svg>
+<div class="timeline-axis">${[0,300,600,900].map(t=>`<span style="left:${scale(t)}%">${t===0?'0':`${t/60} min`}</span>`).join('')}</div>${gantt}</figure>
+<div class="legend"><span><i class="destroy-key"></i>destroy</span><span><svg class="gap-key" aria-hidden="true"><rect width="100%" height="100%" fill="url(#absent)"/></svg>does not exist</span><span><i class="skip-key"></i>skipped</span><span><i class="line-key"></i>expected to fail</span></div>
+<div class="stranded"><h2>Destroyed with nothing in their place</h2>${stranded.map(c=>`<p class="address">${square('delete')}<span>${escape(c.address)}</span></p>`).join('')}</div>
+<p class="conditional rich">${rich(a.narrative[1].text)}</p>`);
+</script></html>

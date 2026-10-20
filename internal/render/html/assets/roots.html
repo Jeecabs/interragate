@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>{{.Title}} · interragate</title>
+<style>
+@font-face { font-family: "Geist"; src: url(data:font/woff2;base64,{{.GeistSans}}) format("woff2"); font-weight: 100 900; font-style: normal; font-display: block; }
+@font-face { font-family: "Geist Mono"; src: url(data:font/woff2;base64,{{.GeistMono}}) format("woff2"); font-weight: 100 900; font-style: normal; font-display: block; }
+{{.CSS}}
+/* The index of several roots: one line each, worst first, every line a
+   way into that root's report. */
+.roots { max-width: var(--measure); margin: 0 auto; padding: 96px var(--side) 120px; }
+.roots-head { margin: 0 0 56px; }
+.roots-head .brand { display: block; margin-bottom: 40px; font: 600 17px var(--sans); color: var(--ink); }
+.roots-head h1 { max-width: 760px; margin: 0; font: 600 44px/1.12 var(--sans); letter-spacing: -0.025em; color: var(--ink); }
+.roots-head p { margin: 18px 0 0; font-size: 15px; color: var(--muted); }
+.root { display: grid; grid-template-columns: 150px minmax(0, 260px) minmax(0, 1fr) auto; gap: 24px; align-items: baseline; padding: 18px 16px; margin: 0 -16px; color: var(--ink-2); text-decoration: none; }
+a.root:hover { background: var(--hover); }
+.r-verdict { display: inline-flex; align-items: center; gap: 9px; font: 600 14px var(--sans); color: var(--ink); white-space: nowrap; }
+.r-verdict svg { flex: none; transform: translateY(2px); }
+.r-name { font: 500 14px var(--mono); color: var(--ink); overflow-wrap: anywhere; }
+.r-headline { font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+.r-error { font: 13px/1.5 var(--mono); color: var(--ink-2); white-space: pre-wrap; }
+.r-counts { font: 500 13px var(--mono); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.r-counts span + span { margin-left: 12px; }
+.c-create { color: var(--sym-create); } .c-update { color: var(--sym-update); } .c-replace { color: var(--sym-replace); } .c-delete { color: var(--sym-delete); }
+@media (max-width: 767px) {
+  .roots { padding-top: 56px; }
+  .roots-head h1 { font-size: 32px; }
+  .root { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+}
+</style>
+</head>
+<body>
+<main class="roots">
+  <header class="roots-head">
+    <span class="brand">interragate</span>
+    <h1>{{.Headline}}</h1>
+    <p>{{.Facts}}</p>
+  </header>
+  {{range .Rows}}
+  {{if .Href}}<a class="root" href="{{.Href}}">{{else}}<div class="root">{{end}}
+    <span class="r-verdict">{{.Icon}}{{.Verdict}}</span>
+    <span class="r-name">{{.Name}}</span>
+    {{if .Error}}<span class="r-error">{{.Error}}</span>{{else}}<span class="r-headline">{{.Headline}}</span>{{end}}
+    <span class="r-counts">{{range .Counts}}<span class="c-{{.Kind}}">{{.Text}}</span>{{end}}</span>
+  {{if .Href}}</a>{{else}}</div>{{end}}
+  {{end}}
+</main>
+<template id="interragate-licences"><pre>{{.Licences}}</pre></template>
+</body>
+</html>

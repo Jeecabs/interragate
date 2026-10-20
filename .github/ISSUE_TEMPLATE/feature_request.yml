@@ -1,0 +1,17 @@
+name: Feature request
+description: Suggest a rule, command or improvement.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: A concrete plan or review task helps explain the need.
+    validations:
+      required: true
+  - type: textarea
+    id: behaviour
+    attributes:
+      label: Proposed behaviour
+      description: Describe the input and the result you would like to see.
+    validations:
+      required: true

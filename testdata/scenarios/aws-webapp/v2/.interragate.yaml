@@ -1,0 +1,31 @@
+# The services outside Terraform that use what this configuration
+# manages. Terraform cannot see them, so interragate checks every plan
+# against what is written here.
+consumers:
+  - name: storefront-web
+    platform: vercel
+    owners: ["@acme/web"]
+    link: https://vercel.com/acme/storefront-web/settings/environment-variables
+    uses:
+      - host: www.storefront.example.com
+        as: NEXT_PUBLIC_API_URL
+      - resource: aws_db_instance.orders
+        attribute: endpoint
+        as: DATABASE_URL
+
+  - name: storefront-app
+    platform: expo
+    owners: ["@acme/mobile"]
+    uses:
+      - host: www.storefront.example.com
+        as: EXPO_PUBLIC_API_URL
+      - resource: aws_s3_bucket.logs
+        attribute: bucket
+        as: EXPO_PUBLIC_CRASH_BUCKET
+
+  - name: Acme Pay callbacks
+    platform: partner
+    owners: ["@acme/payments"]
+    uses:
+      - resource: aws_security_group.alb
+        reach: 8443/tcp

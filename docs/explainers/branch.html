@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en-GB"><meta charset="utf-8"><meta name="viewport" content="width=800"><title>What your branch explains</title><link rel="stylesheet" href="shared.css"><main class="branch"></main>
+<script type="module">
+import {load, finish, rich, escape, units, legend, change, narrative} from './shared.mjs';
+const r = await load(), changed = r.changes.filter(c => c.action!=='no-op');
+if(new URLSearchParams(location.search).has('compact')) document.documentElement.classList.add('compact');
+const groups = key => changed.filter(c => (c.origin || '') === key).sort((a,b)=>['delete','replace','update','create'].indexOf(a.action)-['delete','replace','update','create'].indexOf(b.action) || Number(!!a.cosmetic)-Number(!!b.cosmetic));
+const edited=groups('edit'), follows=groups('follows'), untied=groups('');
+const db=change(r,'aws_db_instance.orders');
+const encryptionEdit=db.edit.lines.filter(l=>/storage_encrypted/.test(l.text));
+await finish(`<div class="heading"><h1>Your edits</h1><p class="meta mono">${escape(r.git.branch)}<br> since ${escape(r.git.base)}</p></div>
+<div class="origin"><div class="number">${edited.length}</div><div><h2>From your edits</h2>${units(edited)}<p class="example"><code>${escape(db.address)}</code> · <code>${escape(db.edit.file)}:${db.location.line}</code></p><pre class="edit-lines">${encryptionEdit.map(l=>`<span class="${l.op==='+'?'action-create':'action-delete'}">${escape(l.op+' '+l.text.trim())}</span>`).join('\n')}</pre></div></div>
+<div class="origin"><div class="number">${follows.length}</div><div><h2>Following from them</h2>${units(follows)}<p class="example"><code>aws_ssm_parameter.db_endpoint</code></p><p class="rich">${rich(change(r,'aws_ssm_parameter.db_endpoint').why)}</p></div></div>
+<div class="origin"><div class="number">${untied.length}</div><div><h2>Not tied to an edit</h2>${units(untied)}<p class="rich">${rich(narrative(r,'`aws_security_group.alb` was changed').text)}</p></div></div>
+${legend()}`);
+</script></html>

@@ -1,0 +1,18 @@
+{
+  "name": "interragate",
+  "owner": {
+    "name": "Jeecabs"
+  },
+  "metadata": {
+    "description": "interragate for coding agents: review Terraform and OpenTofu plans before you apply them.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "interragate",
+      "description": "Review Terraform and OpenTofu plans before you apply them: what each change means, what destroys data, what only changes because something else does, where the apply will fail, and which changes no edit explains.",
+      "version": "0.1.0",
+      "source": "./plugins/interragate"
+    }
+  ]
+}

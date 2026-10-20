@@ -1,0 +1,3 @@
+# Who reviews what. The network module has owners of its own.
+*                  @acme/platform
+/modules/network/  @acme/network

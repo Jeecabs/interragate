@@ -1,0 +1,17 @@
+interragate
+Copyright (C) 2026 Jeecabs and interragate contributors
+SPDX-License-Identifier: AGPL-3.0-only
+
+interragate is free software: you can redistribute it and/or modify it
+under the terms of version 3 of the GNU Affero General Public License
+as published by the Free Software Foundation.
+
+interragate is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See LICENSE
+for the full terms.
+
+Source code: https://github.com/Jeecabs/interragate
+
+Third-party components retain their own copyright notices and licences.
+See third_party/README.md and the notices shipped with release archives.

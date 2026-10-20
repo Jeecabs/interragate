@@ -1,0 +1,5 @@
+sample-report.json
+sample-terminal.txt
+checks/
+render-checks.json
+.c-*/

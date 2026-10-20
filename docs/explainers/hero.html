@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en-GB"><meta charset="utf-8"><meta name="viewport" content="width=800"><title>interragate: the sample plan at a glance</title><link rel="stylesheet" href="shared.css"><main class="hero"></main>
+<script type="module">
+import {load, finish, brand, escape, severity, units} from './shared.mjs';
+const r = await load(), s = r.summary;
+const rows = [['delete','destroyed'],['replace','replaced'],['update','updated'],['create','created']].map(([action,label]) => {
+  const cs = r.changes.filter(c => c.action === action).sort((a,b) => Number(!!a.cosmetic)-Number(!!b.cosmetic));
+  return `<div class="label"><b>${cs.length}</b> ${label}</div>${units(cs)}${action==='update' ? `<p class="note">${s.cosmetic} only touch tags or formatting</p>` : ''}`;
+}).join('');
+const terminal=await (await fetch('./sample-terminal.txt')).text();
+const lines=terminal.split('\n');
+let bullets=0;
+const end=lines.findIndex(line=>/^  [●·] /.test(line)&&++bullets===5);
+if(end<0) throw new Error('Terminal excerpt no longer has four complete items');
+await finish(`<div class="mast">${brand}<p class="meta">${escape(r.plan.dir)} · ${escape(r.plan.source)}</p></div>
+${severity(r.risk.level, r.risk.level[0].toUpperCase()+r.risk.level.slice(1)+' risk')}<p class="verdict">${escape(r.risk.headline)}</p>
+<figure class="inventory" aria-label="One square per resource change">${rows}</figure>
+<pre class="terminal" aria-label="Excerpt of the real demo terminal output">${escape(lines.slice(0,end).join('\n').trimEnd())}</pre>`);
+</script></html>

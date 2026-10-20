@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#f7f6f3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f0f0e" media="(prefers-color-scheme: dark)">
+<title>{{.Title}}</title>
+<script>
+  // Apply a saved theme before first paint so the page never flashes, and
+  // tint the browser chrome to match it.
+  try {
+    var t = localStorage.getItem("interragate-theme");
+    if (t === "light" || t === "dark") {
+      document.documentElement.setAttribute("data-theme", t);
+      document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+        m.setAttribute("content", t === "dark" ? "#0f0f0e" : "#f7f6f3");
+      });
+    }
+  } catch (e) {}
+</script>
+<style>
+/* Geist, Geist Mono and Geist Pixel: Copyright (c) 2023 Vercel, in
+   collaboration with basement.studio. SIL Open Font License 1.1,
+   https://openfontlicense.org. Subset for this report. */
+@font-face { font-family: "Geist"; src: url(data:font/woff2;base64,{{.GeistSans}}) format("woff2"); font-weight: 100 900; font-style: normal; font-display: block; }
+@font-face { font-family: "Geist Mono"; src: url(data:font/woff2;base64,{{.GeistMono}}) format("woff2"); font-weight: 100 900; font-style: normal; font-display: block; }
+@font-face { font-family: "Geist Pixel"; src: url(data:font/woff2;base64,{{.GeistPixel}}) format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+{{.CSS}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<template id="interragate-licences"><pre>{{.Licences}}</pre></template>
+<script id="interragate-data" type="application/json">{{.Data}}</script>
+<script id="interragate-markdown" type="application/json">{{.Markdown}}</script>
+{{if .Live}}<script id="interragate-live" type="application/json">{{.Live}}</script>
+{{end}}
+<script>{{.JS}}</script>
+</body>
+</html>

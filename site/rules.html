@@ -1,0 +1,36 @@
+{{template "head" .}}
+<body>
+{{template "header" .}}
+<main id="main" class="wrap">
+  <header class="page-head">
+    <h1>Rules</h1>
+    <p class="lead">{{len .Rules}} checks for what a plan changes. Configure <code>disable</code>, <code>severity</code> and your own <code>policies</code> in <code>.interragate.yaml</code>.</p>
+  </header>
+  <div class="rules-layout">
+    <nav class="toc" aria-label="Categories">
+      <input class="filter" type="search" placeholder="Filter rules" aria-label="Filter rules" data-filter hidden>
+      <ul>
+        {{range .Groups}}<li><a href="#category-{{.ID}}">{{.Name}}<span class="count" data-count="{{.ID}}">{{len .Rules}}</span></a></li>
+        {{end}}
+      </ul>
+    </nav>
+    <div class="rule-list">
+      {{range .Groups}}
+      <section class="rule-group" id="category-{{.ID}}" data-group="{{.ID}}" aria-labelledby="category-{{.ID}}-h">
+        <h2 id="category-{{.ID}}-h">{{.Name}}</h2>
+        <p class="group-about">{{.About}}</p>
+        {{range .Rules}}
+        <article class="rule" id="{{.ID}}">
+          <h3><a href="#{{.ID}}"><code>{{.ID}}</code></a></h3>
+          <p class="rule-title">{{.Title}}</p>
+          <p class="rule-meta">{{sev .Severity}}<span>{{.Severity}} by default</span></p>
+          <p class="rule-doc">{{doc .Doc}}</p>
+        </article>
+        {{end}}
+      </section>
+      {{end}}
+      <p class="no-match" hidden>No rule matches that. The filter looks at each rule's name, title and description.</p>
+    </div>
+  </div>
+</main>
+{{template "footer" .}}

@@ -1,0 +1,15 @@
+# The agent plugin, for APM (https://github.com/microsoft/apm). make plugin
+# writes its manifests from this file; bump version to ship a change.
+name: interragate
+version: 0.1.0
+license: AGPL-3.0-only
+description: "Review Terraform and OpenTofu plans before you apply them: what each change means, what destroys data, what only changes because something else does, where the apply will fail, and which changes no edit explains."
+author: Jeecabs
+homepage: https://jeecabs.github.io/interragate/
+repository: https://github.com/Jeecabs/interragate
+keywords: [terraform, opentofu, infrastructure-as-code, plan, review]
+targets: [claude, codex, cursor, copilot]
+dependencies:
+  apm: []
+  mcp: []
+includes: auto
