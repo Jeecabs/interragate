@@ -57,7 +57,6 @@
     <div class="story-grid" data-story>
 
       <article class="chapter" style="--n:1" aria-labelledby="ch1">
-        <p class="ch-no">01</p>
         <h3 id="ch1">Encrypting the database replaces it.</h3>
         <p class="ch-subject"><span class="sym replace">-/+</span> aws_db_instance.orders</p>
         {{with finding "stateful-replace:aws_db_instance.orders"}}
@@ -103,7 +102,6 @@
       </figure>
 
       <article class="chapter" style="--n:2" aria-labelledby="ch2">
-        <p class="ch-no">02</p>
         <h3 id="ch2">Then the apply stops halfway.</h3>
         <p class="ch-subject"><span class="sym">$</span> terraform apply</p>
         {{with finding "protected-delete:aws_db_instance.orders"}}
@@ -143,7 +141,6 @@
       {{end}}
 
       <article class="chapter" style="--n:3" aria-labelledby="ch3">
-        <p class="ch-no">03</p>
         <h3 id="ch3">Deleting a block empties a bucket.</h3>
         <p class="ch-subject"><span class="sym delete">-</span> aws_s3_bucket.logs</p>
         {{with finding "stateful-destroy:aws_s3_bucket.logs"}}
@@ -175,7 +172,6 @@
       </figure>
 
       <article class="chapter" style="--n:4" aria-labelledby="ch4">
-        <p class="ch-no">04</p>
         <h3 id="ch4">A temporary rule opens SSH to everyone.</h3>
         <p class="ch-subject"><span class="sym update">~</span> aws_security_group.app</p>
         {{with finding "public-ingress:aws_security_group.app"}}
@@ -211,7 +207,6 @@
       </figure>
 
       <article class="chapter" style="--n:5" aria-labelledby="ch5">
-        <p class="ch-no">05</p>
         <h3 id="ch5">Removing a zone moves every subnet after it.</h3>
         <p class="ch-subject"><span class="sym replace">-/+</span> module.network.aws_subnet.private[1]</p>
         {{with finding "count-index-shift:module.network.aws_subnet.private[1]"}}
@@ -254,7 +249,6 @@
       </figure>
 
       <article class="chapter" style="--n:6" aria-labelledby="ch6">
-        <p class="ch-no">06</p>
         <h3 id="ch6">A rename rebuilds the server.</h3>
         <p class="ch-subject"><span class="sym delete">-</span> aws_instance.web <span class="sym create">+</span> aws_instance.app</p>
         {{with finding "missing-moved-block:aws_instance.web"}}
@@ -299,7 +293,6 @@
       </figure>
 
       <article class="chapter" style="--n:7" aria-labelledby="ch7">
-        <p class="ch-no">07</p>
         <h3 id="ch7">A fix made by hand is undone.</h3>
         <p class="ch-subject"><span class="sym update">~</span> aws_security_group.alb</p>
         {{with finding "drift-revert:aws_security_group.alb"}}

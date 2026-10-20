@@ -303,8 +303,7 @@ h2 { font-size: clamp(30px, 3.5vw, 44px); line-height: 1.1; letter-spacing: -0.0
 .story-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 52px; }
 .chapter { max-width: 600px; }
 .chapter + .scene { margin-bottom: 56px; }
-.ch-no { font: 500 12px/1 var(--mono); color: var(--muted); letter-spacing: 0.04em; }
-.chapter h3 { margin-top: 16px; font-size: clamp(24px, 2.5vw, 30px); line-height: 1.15; letter-spacing: -0.03em; text-wrap: balance; }
+.chapter h3 { margin-top: 0; font-size: clamp(24px, 2.5vw, 30px); line-height: 1.15; letter-spacing: -0.03em; text-wrap: balance; }
 .ch-subject { margin-top: 14px; font: 450 13px/1.5 var(--mono); color: var(--ink-2); overflow-wrap: anywhere; }
 .ch-subject .sym { margin-right: 4px; }
 .ch-subject .sym ~ .sym { margin-left: 10px; }

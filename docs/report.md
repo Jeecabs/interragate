@@ -11,6 +11,8 @@
 - **Terraform's notation.** Actions are marked the way `terraform plan` writes them: `+` create, `~` update, `-/+` replace (`+/-` when the new object is created first), `-` destroy, `<=` read.
 - **Map.** Resources laid out by dependency depth in lanes per module (or per kind of resource). Select one to light up everything it depends on and its blast radius, brighter the closer they are. "Around the selection" draws just that chain. Switch the drawing from the plan to **Before** or **After** (or press `b` to flip between them) to see the infrastructure as it is now and as the apply leaves it, in the same layout, with what does not exist at that moment as a dashed outline. Between them, play the apply (`p`): resources light up in their step's colour as interragate's simulation runs them, and come and go as they are created and destroyed. Save the map as an image (PNG, or SVG from Go to) to drop into a pull request: the whole drawing as you see it, with a header saying what it is. A minimap, `f` to fit and `+`/`−` to zoom; zoomed far out it draws blocks only and skips what is off screen, so 2,000-resource plans stay smooth.
 
+  **Fullscreen** expands the map and its details. Press `Esc` to return.
+
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="../site/images/map-dark.webp">
     <img alt="The dependency map, focused on the database being replaced: what it depends on, the two resources that depend on it, and its details beside the map" src="../site/images/map.webp">

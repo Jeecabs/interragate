@@ -909,6 +909,7 @@
   // ------------------------------------------------------------- workspace
 
   var wsHead, workspace, mainCol, detailCol;
+  var mapFullscreen = null;
 
   function headHint(id) {
     if (id === "changes") return h("div", { class: "head-hint" }, h("kbd", null, "j"), h("kbd", null, "k"), h("span", null, "move"), h("kbd", null, "/"), h("span", null, "filter"), h("kbd", null, "esc"), h("span", null, "clear"));
@@ -934,7 +935,7 @@
   }
 
   function scrollToWorkspace() {
-    if (!wsHead) return;
+    if (!wsHead || mapFullscreen) return;
     settleReveal();
     var top = wsHead.getBoundingClientRect().top;
     if (top > 160 || top < 0) wsHead.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
@@ -950,6 +951,7 @@
   }
 
   function renderBody(animate) {
+    if (mapFullscreen && state.tab !== "map") closeMapFullscreen();
     syncTabs();
     var head = workspaceHead();
     wsHead.replaceWith(head);
@@ -2026,7 +2028,7 @@
   }
 
   function mapView() {
-    var wrap = h("div");
+    var wrap = h("div", { class: "map-view" });
     var row = h("div", { class: "filters", role: "group", "aria-label": "Map options" });
     var scopes = h("div", { class: "options", role: "group", "aria-label": "Show" }, h("span", { class: "opt-label", "aria-hidden": "true" }, "Show"));
     [["changed", "Changes and neighbours", "Changed resources and their direct neighbours"], ["focus", "Around the selection", "Only what the selected resource depends on and what depends on it"], ["all", "Everything", "Every resource in the configuration"]].forEach(function (sc) {
@@ -2043,6 +2045,10 @@
       cos.title = "Treat updates that only touch tags or formatting as changes";
       row.appendChild(cos);
     }
+    row.appendChild(h("button", {
+      type: "button", class: "map-fullscreen-toggle", "aria-haspopup": "dialog",
+      onclick: openMapFullscreen,
+    }, "Fullscreen"));
     wrap.appendChild(row);
 
     var ids = visibleNodes();
@@ -2147,6 +2153,54 @@
     highlight();
     return wrap;
   }
+
+  function openMapFullscreen() {
+    if (mapFullscreen || state.tab !== "map") return;
+    settleReveal();
+    hideTip();
+    if (mapEls) mapSize();
+    var placeholder = document.createComment("map workspace");
+    workspace.before(placeholder);
+    var exit = h("button", { type: "button", class: "map-fullscreen-exit", onclick: closeMapFullscreen }, "Exit fullscreen", icon("close"));
+    var stage = h("div", { class: "map-fullscreen" },
+      h("div", { class: "map-fullscreen-head" }, h("h2", { id: "fullscreen-title" }, "Dependency map"), exit));
+    var dialog = h("dialog", { class: "map-dialog", "aria-labelledby": "fullscreen-title" }, stage);
+    mapFullscreen = { dialog: dialog, stage: stage, placeholder: placeholder, native: false, x: window.scrollX, y: window.scrollY };
+    stage.appendChild(workspace);
+    document.body.appendChild(dialog);
+    document.body.classList.add("map-expanded");
+    dialog.addEventListener("cancel", function (e) { e.preventDefault(); closeMapFullscreen(); });
+    dialog.showModal();
+    exit.focus({ preventScroll: true });
+    requestAnimationFrame(resizeMap);
+    // The dialog also fills the viewport where native fullscreen is unavailable.
+    if (document.fullscreenEnabled && stage.requestFullscreen) {
+      stage.requestFullscreen().catch(function () { /* Keep the viewport-sized dialog. */ });
+    }
+  }
+
+  function closeMapFullscreen() {
+    if (!mapFullscreen) return;
+    var full = mapFullscreen;
+    mapFullscreen = null;
+    hideTip();
+    if (document.fullscreenElement === full.stage) document.exitFullscreen().catch(function () {});
+    full.placeholder.replaceWith(workspace);
+    full.dialog.close();
+    full.dialog.remove();
+    document.body.classList.remove("map-expanded");
+    window.scrollTo(full.x, full.y);
+    var button = workspace.querySelector(".map-fullscreen-toggle");
+    if (button) button.focus({ preventScroll: true });
+    requestAnimationFrame(resizeMap);
+  }
+
+  document.addEventListener("fullscreenchange", function () {
+    if (!mapFullscreen) return;
+    if (document.fullscreenElement === mapFullscreen.stage) mapFullscreen.native = true;
+    else if (mapFullscreen.native) closeMapFullscreen();
+    requestAnimationFrame(resizeMap);
+  });
 
   // Before and after: the same drawing, with what does not exist yet (or
   // any more) left as a dashed outline, so flipping between the two shows
@@ -2771,6 +2825,30 @@
     return mapEls.size;
   }
 
+  function resizeMap() {
+    if (!mapEls) return;
+    var previous = mapEls.size;
+    mapEls.size = null;
+    var size = mapSize();
+    if (previous && state.view) {
+      cancelAnimationFrame(camRaf);
+      var p = mapEls.layout.pos.get(selectedResource());
+      var cx = p && (p.x + NODE_W / 2) * state.view.k + state.view.x;
+      var cy = p && (p.y + NODE_H / 2) * state.view.k + state.view.y;
+      var keepSelection = p && cx >= 0 && cx <= previous.w && cy >= 0 && cy <= previous.h;
+      state.view.x += (size.w - previous.w) / 2;
+      state.view.y += (size.h - previous.h) / 2;
+      if (keepSelection) {
+        var x = p.x * state.view.k + state.view.x, y = p.y * state.view.k + state.view.y;
+        if (x < 0 || y < 0 || x + NODE_W * state.view.k > size.w || y + NODE_H * state.view.k > size.h - 56) {
+          state.view.x = size.w / 2 - (p.x + NODE_W / 2) * state.view.k;
+          state.view.y = (size.h - 56) / 2 - (p.y + NODE_H / 2) * state.view.k;
+        }
+      }
+    }
+    applyView();
+  }
+
   function updateMinimap() {
     if (!mapEls || !state.view) return;
     var size = mapSize();
@@ -3032,7 +3110,7 @@
     if (ids.size) tip.appendChild(h("div", { class: "t-line" }, sevMark(n.severity, true), " · " + plural(ids.size, "finding")));
     var down = transitive(n.id, downs).size;
     if (down) tip.appendChild(h("div", { class: "t-line" }, plural(down, "resource depends", "resources depend") + " on it"));
-    document.body.appendChild(tip);
+    (mapFullscreen ? mapFullscreen.stage : document.body).appendChild(tip);
     moveTip(e);
   }
 
@@ -3172,6 +3250,7 @@
     var t = e.target;
     var typing = isTextEntry(t);
     if (e.key === "Escape") {
+      if (mapFullscreen) { e.preventDefault(); closeMapFullscreen(); return; }
       if (typing) { t.blur(); return; }
       if (state.sel) {
         state.sel = null;
@@ -3228,11 +3307,7 @@
     }
   });
 
-  window.addEventListener("resize", function () {
-    if (!mapEls) return;
-    mapEls.size = null;
-    applyView();
-  });
+  window.addEventListener("resize", resizeMap);
 
   // ----------------------------------------------------------------- apply
 
@@ -3792,6 +3867,7 @@
 
   function openPalette() {
     if (paletteEl) return;
+    closeMapFullscreen();
     var items = paletteItems();
     var input = h("input", { class: "palette-input", type: "text", placeholder: "Go to a resource, finding or view", spellcheck: "false", autocomplete: "off", role: "combobox", "aria-expanded": "true", "aria-controls": "palette-list", "aria-autocomplete": "list" });
     var list = h("ul", { class: "palette-list", id: "palette-list", role: "listbox", "aria-label": "Results" });
