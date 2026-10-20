@@ -29,7 +29,7 @@ The script also copies the root `LICENSE` and `COPYRIGHT` into the plugin
 and the skill directory. Installing the skill alone or packing it as a
 plugin retains its licence notices.
 
-APM writes nothing for Cursor, so `scripts/plugin.sh` makes its manifest and catalog from the Claude Code ones. The script pins APM's version and runs it with uv; it also needs jq. `make plugin-check` fails when a file differs from what the `apm.yml` files make, and CI runs it.
+APM writes nothing for Cursor, so `scripts/plugin.sh` makes its manifest and catalog from the Claude Code ones. The script pins APM's version and runs it with uv; it also needs jq. `make plugin-check` fails when a file differs from what the `apm.yml` files make.
 
 To ship a change to the skill, bump `version` in `plugins/interragate/apm.yml` and run `make plugin`: Claude Code and Codex users only get a new version of the plugin when its version changes.
 
@@ -66,10 +66,9 @@ The explainers in `docs/images/explain-*.png` are drawn from the sample plan's r
 
 ## Release checks
 
-CI checks Go 1.26 and 1.27 on Linux, and Go 1.27 on macOS. A separate
-security workflow scans reachable Go vulnerabilities, Git history for
-secrets, and workflow syntax. Dependencies and actions have weekly
-Dependabot updates; external actions are pinned to full commit SHAs.
+CI runs `make test docs-check` with Go 1.27 on Linux. The release workflow
+also scans reachable Go vulnerabilities. Dependencies and actions have
+monthly Dependabot updates; external actions are pinned to full commit SHAs.
 
 The [release guide](releasing.md) covers public repository setup, packaging
 and publishing a reviewed draft release.

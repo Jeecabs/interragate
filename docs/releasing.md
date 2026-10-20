@@ -24,7 +24,7 @@ the landing page, rules and both sample reports. Set the repository website
 to `https://jeecabs.github.io/interragate/` once it is serving.
 
 Protect `main` after the initial history rewrite. Require pull requests,
-passing CI and security jobs, and block force pushes. Select the actual
+passing CI, and block force pushes. Select the actual
 check names from a successful run. A fresh clone must work without private
 credentials; try both `go install` and the sample report.
 
@@ -42,8 +42,7 @@ git diff --check
 ```
 
 Do not publish with failed or missing checks. Check GitHub's run results
-as well as the local commands, including the action integration job and
-macOS tests. GitHub Actions requires no cloud credentials for this repo's
+as well as the local commands. GitHub Actions requires no cloud credentials for this repo's
 fixtures or demos.
 
 Commit all changes before packaging. The script exports `HEAD`, vendors
@@ -69,7 +68,7 @@ and target; timestamps and ownership are normalised.
 
 ## Publish
 
-After GitHub CI and security checks pass on the commit being released,
+After GitHub CI passes on the commit being released,
 create and push a version tag:
 
 ```sh

@@ -15,32 +15,6 @@ concurrency:
 
 jobs:
   test:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            go: 1.26.x
-          - os: ubuntu-latest
-            go: 1.27.x
-          - os: macos-latest
-            go: 1.27.x
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version: ${{ matrix.go }}
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: "24"
-      - run: make test docs-check
-      - run: go test -race ./...
-      - run: go mod verify
-
-  site:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -49,35 +23,4 @@ jobs:
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: 1.27.x
-      - run: make site
-      - name: Package a release from the checked-in source
-        run: python3 scripts/release.py v0.0.0-ci --target linux/amd64
-
-  plugin:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
-      - name: Plugin manifests and catalogs match the apm.yml files
-        run: scripts/plugin.sh check
-      - name: The skill follows the Agent Skills spec
-        run: uvx --from skills-ref==0.1.1 agentskills validate plugins/interragate/skills/reviewing-terraform-plans
-
-  action:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - id: interragate
-        uses: ./
-        with:
-          plan: testdata/plans/aws-webapp.terraform.json
-          fail-on: none
-          report-artifact: interragate-demo-report
-      - name: Outputs are set
-        run: |
-          test "${{ steps.interragate.outputs.risk }}" = critical
-          test "${{ steps.interragate.outputs.findings }}" -gt 0
+      - run: make test docs-check

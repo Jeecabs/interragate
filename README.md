@@ -63,7 +63,9 @@ interragate walks the changes in the order Terraform's apply will, with typical 
 
 ## Outside Terraform
 
-Terraform cannot see the site on Vercel that holds your database's endpoint, the app on phones that calls your API, or the partner whose callbacks come in on a port. Declare them in `.interragate.yaml` and interragate says when a plan destroys what they use, changes a value they hold, closes their way in or takes it away mid-apply, and how soon each can catch up: a site on its next deployment, an app only when people update it. [How to declare them](docs/configuration.md#services-outside-terraform).
+Terraform's dependency graph does not capture every relationship between your systems. Some dependencies exist only as tribal knowledge within your team. Declare them in `.interragate.yaml` so interragate can account for them when reviewing a plan.
+
+interragate flags when a plan removes something a dependent system needs, changes a value it uses, blocks its access or causes an outage during apply. It also accounts for how each system picks up changed values. [How to declare dependencies](docs/configuration.md#services-outside-terraform).
 
 ## Findings
 
